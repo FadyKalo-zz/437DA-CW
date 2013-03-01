@@ -1,12 +1,12 @@
-import java.utils.*;
+import java.util.*;
 
 class FailureDetector implements IFailureDetector{
 
- Process P;
+ Process p;
  LinkedList<Integer> suspects;
  Timer t;
 
- static final int Delat = 100;
+ static final int Delta = 100;
 
  class PeriodicTask extends TimerTask{
 	public void run(){
