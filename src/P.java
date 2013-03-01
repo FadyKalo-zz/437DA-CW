@@ -23,7 +23,10 @@ public class P extends Process {
 		}
 	}
    public static void main(String [] args){
-		P p = new P("P1",1,2);
+		String name=args[0];
+		int id = Integer.parseInt(args[1]);
+		int size = Integer.parseInt(args[2]);
+		P p = new P(name,id,size);
 		p.registeR();
 		p.begin();
 	}
