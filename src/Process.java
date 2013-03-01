@@ -15,8 +15,8 @@ class Process {
 	private Socket socket = null;
 	private InputStreamReader input;
 	private BufferedReader b;
-	private PrintWriter p;	
-	
+	private PrintWriter p;
+
 	/* A random number generator */
 	Random random;
 	
