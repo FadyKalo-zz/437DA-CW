@@ -3,96 +3,46 @@ import java.util.*;
 class FailureDetector implements IFailureDetector{
 
  Process p;
+ int sizeOfNetwork;
  LinkedList<Integer> suspects;
  List<Double> timestamps;
  Timer t;
+ int leader = -1 ;
 
- static final int Delta = 100;
+ static final int Delta = 10000;
  
  
  
  class PeriodicTask extends TimerTask{
 	public void run(){
+		System.out.println("Sending heartbeat "+p.pid);
 		p.broadcast("heartbeat", "null");
 	}
- }
-
- class CheckIfProcessFailed implements Runnable{
-
-	@Override
-	public void run() {
-		
-		// adjust to perfectFailure or EventuallyPerfectFailure
-		int timeout = Delta + perfectFailure();
-		
-		while(true){
-			
-			try {
-				Thread.sleep(Delta);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			// go through the list of timeStamps
-			Double[] ts = timestamps.toArray(new Double[timestamps.size()]);
-			for(int i = 0; i< ts.length; i++){
-				// if last timestamp exceeds given delta/ delay add to suspected list
-				if(System.currentTimeMillis()- ts[i] > timeout && !isSuspect(i)){
-					// add to suspect list
-					suspects.add(i);
-					
-				}
-			}
-		}
-		
-	}
-	 
  }
  
  
  public FailureDetector(Process p){
 
 	this.p = p;
+	this.sizeOfNetwork = p.getNo();
 	t = new Timer();
 	suspects = new LinkedList<Integer>();
-	timestamps = Arrays.asList(new Double[p.getNo()]);
+	timestamps = new ArrayList<Double>();
+	initTimeStamps(sizeOfNetwork);
  }
-
- public void begin(){
-
-	t.schedule(new PeriodicTask(), 0, Delta);
-	(new Thread(new CheckIfProcessFailed())).start();
- }
-
- public void receive(Message m ){
-
-	//Utils.out(p.pid, m.toString());
-	
-	int source;
-	double now;
-	Utils.out(p.pid, m.toString());
-	source = m.getSource()-1;
-	now = System.currentTimeMillis();
-	timestamps.set(source,now);
-	Utils.out(p.pid, m.toString());
-
- }
-
-
  
-public int perfectFailure(){
+ 
+ private void initTimeStamps(int size){
+	 
+	 for(int i = 0; i< size; i++){
+		 timestamps.add(i, -1.0);
+	 }
+ }
+ @Override
+ public void begin() {
 	
-	return Utils.DELAY;
-	
-}
-
-public int eventuallyPerfectFailure(){
-	
-	return -1;
-	
-
-}
-
-
+ }
+ 
  public boolean isSuspect(Integer pid){
 
 	return suspects.contains(pid);
@@ -101,12 +51,37 @@ public int eventuallyPerfectFailure(){
 
  public int getLeader(){
 
-	return -1;
+	return leader;
  }
 
  public void isSuspected(Integer process){
 
- 	return;
+ 	suspects.add(process);
  }
+ 
+ public void removeSuspect(Integer pid){
+	 
+	 suspects.remove(pid);
+ }
+ 
+ public void printSuspected(){
+	 
+	 System.out.print("Suspect List: ");
+	 for(int i = 0; i<suspects.size();i++){
+		 System.out.print(suspects.get(i)+" ");
+	 }
+	 System.out.println("");
+	 
+	 
+ }
+
+
+ @Override
+ public void receive(Message m) {
+	
+ }
+
+
+
 
 }

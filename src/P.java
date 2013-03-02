@@ -10,7 +10,7 @@ public class P extends Process {
 
 	public P(String name, int id, int size){
 		super(name,id,size);
-		detector = new FailureDetector(this);
+		detector = new PerfectFailureDetector(this);
 	}
 
 	public void begin(){
