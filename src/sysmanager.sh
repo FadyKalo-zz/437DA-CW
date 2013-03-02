@@ -129,7 +129,7 @@ case ${C} in
 	
 	# To begin with, start NameServer
 	daemonize "P0" java Registrar $N
-	
+
 	start $@ ;;
 	"stop" )
 	stop ;;
