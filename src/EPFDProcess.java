@@ -11,7 +11,6 @@ private IFailureDetector detector;
 
 public EPFDProcess(String name, int id, int size){
 	super(name,id,size);
-//		detector = new PerfectFailureDetector(this);
 	detector = new EventuallyPerfectFailureDetector(this);
 
 }

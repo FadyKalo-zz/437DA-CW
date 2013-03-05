@@ -33,7 +33,7 @@ class PFDProcess extends TimerTask {
 		printSuspected();
 
 		// go through the list of timeStamps
-		Double[] ts = timestamps.toArray(new Double[timestamps.size()]);
+//		Double[] ts = timestamps.toArray(new Double[timestamps.size()]);
 
 		for (int i = 0; i < timestamps.size(); i++) {
 			//not checking its self
@@ -70,25 +70,6 @@ class PFDProcess extends TimerTask {
 					}
 
 				}
-
-//					System.out.println("["+i+"]: "+"Ts: "+ts[i]+"\tGAP: "+(System.currentTimeMillis() - ts[i])+
-//							  "\tDel:"+ currentDelay.get(i)+ "\tThre:"+ threDelay.get(i)+ "\tThreLast:"+ currentT.get(i));
-
-//					if((currentDelay.get(i)+Delta) > threDelay.get(i) && !isSuspect(i)){
-//						System.out.println("ADD: "+"["+i+"]");
-//						isSuspected(i);
-//						printSuspected();
-//					}
-//					if((currentDelay.get(i)+Delta) <= threDelay.get(i) && isSuspect(i)){
-//						System.out.println("RMV: "+"["+i+"]");
-//						removeSuspect(i);
-//						printSuspected();
-//					}
-//					if(System.currentTimeMillis()- ts[i] > currentDelay.get(i) && !isSuspect(i)){
-//						// add to suspect list
-//						isSuspected(i);
-//						calculateLeader();
-//					}
 
 			}
 			previousTs.set(i, timestamps.get(i));
@@ -133,7 +114,7 @@ public synchronized void receive(Message m) {
 	int source = m.getSource() - 1;
 	double now = System.currentTimeMillis();
 	double nowDelay = eventuallyPerfectDelay(m.getPayload());
-	double T = Delta + nowDelay;
+	double T = Delta + 2*nowDelay;
 //	pfd.alert(source, now);
 //	 previousTs.set(source,timestamps.get(source));
 
@@ -157,7 +138,7 @@ public synchronized void receive(Message m) {
 }
 
 public double calculateT(double t, int source) {
-	double newT = (threDelay.get(source) + t) / 2;
+	double newT = (threDelay.get(source) + 2*t) / 2;
 	return newT;
 }
 
