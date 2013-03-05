@@ -56,7 +56,7 @@ public class Registrar {
 	}
 	
 	public Record find (int pid) {
-		String key;g heartbeat 1
+		String key;
 
 		key = String.format("P%d", pid);
 		return find(key);
@@ -86,8 +86,7 @@ public class Registrar {
 		int n = Integer.parseInt(args[0]);
 
 		Registrar server = new Registrar(n);
-		Utils.out(server.pid, String.format("Registrar started;g heartbeat 1
- n = %d.",n));
+		Utils.out(server.pid, String.format("Registrar started;n = %d.",n));
 		ServerSocket serversocket = null;
 		boolean done = false;
 		try {
