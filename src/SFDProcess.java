@@ -1,14 +1,11 @@
-/**
- * Created with IntelliJ IDEA. User: fady Date: 01/03/2013 Time: 12:45 To change this template use File | Settings | File Templates.
- */
-public class P extends Process {
+public class SFDProcess extends Process {
 
 	private IFailureDetector detector;
 
-	public P(String name, int id, int size) {
+	public SFDProcess(String name, int id, int size, int consensValue) {
 
 		super(name, id, size);
-		detector = new PerfectFailureDetector(this);
+		detector = new StrongFailureDetector(this, consensValue);
 	}
 
 	public void begin() {
@@ -19,7 +16,7 @@ public class P extends Process {
 	public synchronized void receive(Message m) {
 
 		String type = m.getType();
-		if (type.equals("heartbeat")) {
+		if (type.equals("heartbeat") || type.equals("consens")) {
 			detector.receive(m);
 		}
 
@@ -30,7 +27,8 @@ public class P extends Process {
 		String name = args[0];
 		int id = Integer.parseInt(args[1]);
 		int size = Integer.parseInt(args[2]);
-		P p = new P(name, id, size);
+		int consens = Integer.parseInt(args[3]);
+		SFDProcess p = new SFDProcess(name, id, size, consens);
 		p.registeR();
 		p.begin();
 	}
